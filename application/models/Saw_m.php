@@ -51,11 +51,15 @@ class Saw_m extends MY_Model
 		return $query->row();
 	}
 
-	public function sort_desc()
+	public function sort_desc( $cond = '' )
 	{
 		$this->load->model('sifat_kimia_tanah_m');
 		$this->load->model('nilai_sifat_tanah_m');
-		$tanah = $this->sifat_kimia_tanah_m->get();
+		if ( (is_array($cond) && count($cond) > 0) || (is_string( $cond ) && strlen( $cond ) >= 3) ) {
+			$tanah = $this->sifat_kimia_tanah_m->get($cond);
+		} else {
+			$tanah = $this->sifat_kimia_tanah_m->get();
+		}
 		$sifat_tanah = [];
 		foreach ($tanah as $row)
 		{

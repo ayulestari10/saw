@@ -263,8 +263,19 @@ class Kepala_bagian extends MY_Controller
     public function hasil()
     {
         $this->load->model('saw_m');
-        $this->data['hasil']    = $this->saw_m->sort_desc();
+
+        if ($this->POST('ubah') && $this->POST('tahun')) {
+            $this->data['hasil']    = $this->saw_m->sort_desc(['year(create_at)' => $this->POST('tahun')]);
+            echo json_encode($this->data['hasil']);
+            exit;
+
+        } else {
+            $this->data['hasil']    = $this->saw_m->sort_desc(['year(create_at)' => date('Y')]);
+        }
+
+       
         $this->data['title']    = 'Hasil Perhitungan';
+        $this->data['tahun']    = $this->sifat_kimia_tanah_m->get_year();
         $this->data['content']  = 'kepala-bagian/hasil';
         $this->template($this->data, 'kepala-bagian');
     }
